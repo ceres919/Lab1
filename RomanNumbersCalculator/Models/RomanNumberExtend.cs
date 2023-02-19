@@ -11,7 +11,7 @@ namespace RomanNumbersCalculator.Models
     {
         public static ushort ToInt(string? stringNumb)
         {
-            
+            if (stringNumb == null) return 0;
             stringNumb = new string(stringNumb.Reverse().ToArray());
             ushort intNumb = 0;
             for (int i = 0; i < stringNumb.Length; i++)
