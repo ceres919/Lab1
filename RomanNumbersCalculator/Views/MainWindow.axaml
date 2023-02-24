@@ -15,24 +15,24 @@
 		  ColumnDefinitions="0.25*, 0.25*, 0.25*, 0.25*"
 		  RowDefinitions="0.4*, 0.2*, 0.2*, 0.2*, 0.2*">
 
-		<TextBox Text="{Binding ShowValue}"
+		<TextBox Text="{Binding CurrentNumberStringRepresentation}"
 				 Focusable="False" IsUndoEnabled="False"
 				 Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" >
 		</TextBox>
 
-		<Button Command="{Binding AddNum}" CommandParameter="I" Name="I" Grid.Row="1" Grid.Column="0">I</Button>
-		<Button Command="{Binding AddNum}" CommandParameter="C" Name="C" Grid.Row="1" Grid.Column="1">C</Button>
-		<Button Command="{Binding ExecuteOperationCommand}" CommandParameter="+" Name="Add" Grid.Row="1" Grid.Column="2">+</Button>
-		<Button Command="{Binding AddNum}" CommandParameter="V" Name="V" Grid.Row="2" Grid.Column="0">V</Button>
-		<Button Command="{Binding AddNum}" CommandParameter="D" Name="D" Grid.Row="2" Grid.Column="1">D</Button>
-		<Button Command="{Binding ExecuteOperationCommand}" CommandParameter="-" Name="Sub" Grid.Row="2" Grid.Column="2">-</Button>
-		<Button Command="{Binding AddNum}" CommandParameter="X" Name="X" Grid.Row="3" Grid.Column="0">X</Button>
-		<Button Command="{Binding AddNum}" CommandParameter="M" Name="M" Grid.Row="3" Grid.Column="1">M</Button>
-		<Button Command="{Binding ExecuteOperationCommand}" CommandParameter="*" Name="Mul" Grid.Row="3" Grid.Column="2">*</Button>
-		<Button Command="{Binding AddNum}" CommandParameter="L" Name="L" Grid.Row="4" Grid.Column="0">L</Button>
-		<Button Command="{Binding ExecuteOperationCommand}" CommandParameter="R" Name="Reset" Grid.Row="4" Grid.Column="1">CE</Button>
-		<Button Command="{Binding ExecuteOperationCommand}" CommandParameter="/" Name="Div" Grid.Row="4" Grid.Column="2">/</Button>
-		<Button Command="{Binding ExecuteOperationCommand}" CommandParameter="="  Name="Result" Grid.Row="1" Grid.Column="3" Grid.RowSpan="5">=</Button>
+		<Button Command="{Binding AddNumber}" CommandParameter="I" Name="I"  Content="I" Grid.Row="1" Grid.Column="0"></Button>
+		<Button Command="{Binding AddNumber}" CommandParameter="C" Name="C" Content="C" Grid.Row="1" Grid.Column="1"></Button>
+		<Button Command="{Binding PlusCommand}" CommandParameter="+" Name="Add" Content="+" Grid.Row="1" Grid.Column="2"></Button>
+		<Button Command="{Binding AddNumber}" CommandParameter="V" Name="V" Content="V" Grid.Row="2" Grid.Column="0"></Button>
+		<Button Command="{Binding AddNumber}" CommandParameter="D" Name="D" Content="D" Grid.Row="2" Grid.Column="1"></Button>
+		<Button Command="{Binding SubCommand}" CommandParameter="-" Name="Sub" Content="-" Grid.Row="2" Grid.Column="2"></Button>
+		<Button Command="{Binding AddNumber}" CommandParameter="X" Name="X" Content="X" Grid.Row="3" Grid.Column="0"></Button>
+		<Button Command="{Binding AddNumber}" CommandParameter="M" Name="M" Content="M" Grid.Row="3" Grid.Column="1"></Button>
+		<Button Command="{Binding MulCommand}" CommandParameter="*" Content="*" Name="Mul" Grid.Row="3" Grid.Column="2"></Button>
+		<Button Command="{Binding AddNumber}" CommandParameter="L" Name="L" Content="L" Grid.Row="4" Grid.Column="0"></Button>
+		<Button Command="{Binding ResetCommand}" Name="Reset" Content="CE" Grid.Row="4" Grid.Column="1"></Button>
+		<Button Command="{Binding DivCommand}" CommandParameter="/" Name="Div" Content="/" Grid.Row="4" Grid.Column="2"></Button>
+		<Button Command="{Binding CalculateCommand}" CommandParameter="="  Name="Result" Content="=" Grid.Row="1" Grid.Column="3" Grid.RowSpan="5"></Button>
 	</Grid>
 
 </Window>

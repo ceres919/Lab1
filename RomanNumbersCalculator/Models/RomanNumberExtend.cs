@@ -9,46 +9,48 @@ namespace RomanNumbersCalculator.Models
 {
     public class RomanNumberExtend : RomanNumber
     {
-        public static ushort ToInt(string? stringNumb)
+        public RomanNumberExtend(ushort n) : base(n) { }
+        public RomanNumberExtend(string n) : base(n) { }
+
+        public static RomanNumberExtend operator +(RomanNumberExtend RomanNumber1, RomanNumberExtend RomanNumber2)
         {
-            if (stringNumb == null) return 0;
-            stringNumb = new string(stringNumb.Reverse().ToArray());
-            ushort intNumb = 0;
-            for (int i = 0; i < stringNumb.Length; i++)
-            {
-                switch (stringNumb[i])
-                {
-                    case 'M':
-                        intNumb += 1000;
-                        break;
-                    case 'D':
-                        intNumb += 500;
-                        break;
-                    case 'C':
-                        intNumb += 100;
-                        if (i > 0)
-                            if (stringNumb[i - 1] == 'M' || stringNumb[i - 1] == 'D') intNumb -= 200;
-                        break;
-                    case 'L':
-                        intNumb += 50;
-                        break;
-                    case 'X':
-                        intNumb += 10;
-                        if (i > 0)
-                            if (stringNumb[i - 1] == 'C' || stringNumb[i - 1] == 'L') intNumb -= 20;
-                        break;
-                    case 'V':
-                        intNumb += 5;
-                        break;
-                    case 'I':
-                        intNumb += 1;
-                        if (i > 0)
-                            if (stringNumb[i - 1] == 'X' || stringNumb[i - 1] == 'V') intNumb -= 2;
-                        break;
-                }
-            }
-            return intNumb;
+            int numb = RomanNumber1.ToUInt16() + RomanNumber2.ToUInt16();
+            if (numb <= 0)
+                throw new RomanNumberException();
+            else
+                return new RomanNumberExtend((ushort)(RomanNumber1.ToUInt16() + RomanNumber2.ToUInt16()));
         }
-        public RomanNumberExtend(string stringNumb) : base(ToInt(stringNumb)) { }
+
+        public static RomanNumberExtend operator -(RomanNumberExtend RomanNumber1, RomanNumberExtend RomanNumber2)
+        {
+            int numb = RomanNumber1.ToUInt16() - RomanNumber2.ToUInt16();
+            if (numb <= 0)
+                throw new RomanNumberException();
+            else
+                return new RomanNumberExtend((ushort)(RomanNumber1.ToUInt16() - RomanNumber2.ToUInt16()));
+        }
+
+        public static RomanNumberExtend operator *(RomanNumberExtend RomanNumber1, RomanNumberExtend RomanNumber2)
+        {
+            int numb = RomanNumber1.ToUInt16() * RomanNumber2.ToUInt16();
+            if (numb <= 0)
+                throw new RomanNumberException();
+            else
+                return new RomanNumberExtend((ushort)(RomanNumber1.ToUInt16() * RomanNumber2.ToUInt16()));
+        }
+
+        public static RomanNumberExtend operator /(RomanNumberExtend RomanNumber1, RomanNumberExtend RomanNumber2)
+        {
+            if (RomanNumber1.ToUInt16() == 0)
+                throw new RomanNumberException();
+            else
+            {
+                int numb = RomanNumber1.ToUInt16() / RomanNumber2.ToUInt16();
+                if (numb == 0)
+                    throw new RomanNumberException();
+                else
+                    return new RomanNumberExtend((ushort)(RomanNumber1.ToUInt16() / RomanNumber2.ToUInt16()));
+            }
+        }
     }
 }

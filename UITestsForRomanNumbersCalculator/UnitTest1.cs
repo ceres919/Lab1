@@ -177,5 +177,64 @@ namespace UITestsForRomanNumbersCalculator
 
             Assert.Equal(ct, boxtext);
         }
+
+        [Fact]
+        public async void Test7()
+        {
+            var app = AvaloniaApp.GetApp();
+            var mainWindow = AvaloniaApp.GetMainWindow();
+            string ct = "#ERROR";
+            await Task.Delay(100);
+
+            var button = mainWindow.GetVisualDescendants().OfType<Button>().First(b => b.Name == "Reset");
+            var button1 = mainWindow.GetVisualDescendants().OfType<Button>().First(b => b.Name == "D");
+            var button2 = mainWindow.GetVisualDescendants().OfType<Button>().First(b => b.Name == "Sub");
+            var button3 = mainWindow.GetVisualDescendants().OfType<Button>().First(b => b.Name == "M");
+            var button4 = mainWindow.GetVisualDescendants().OfType<Button>().First(b => b.Name == "Result");
+
+            var box = mainWindow.GetVisualDescendants().OfType<TextBox>().First();
+
+            button.Command.Execute(button.CommandParameter);
+            button1.Command.Execute(button1.CommandParameter);
+            button2.Command.Execute(button2.CommandParameter);
+            button3.Command.Execute(button3.CommandParameter);
+            button4.Command.Execute(button4.CommandParameter);
+
+            await Task.Delay(50);
+
+            string boxtext = box.Text;
+
+            Assert.Equal(ct, boxtext);
+        }
+
+        [Fact]
+        public async void Test8()
+        {
+            var app = AvaloniaApp.GetApp();
+            var mainWindow = AvaloniaApp.GetMainWindow();
+            string ct = "";
+            await Task.Delay(100);
+
+            var button = mainWindow.GetVisualDescendants().OfType<Button>().First(b => b.Name == "Reset");
+            var button1 = mainWindow.GetVisualDescendants().OfType<Button>().First(b => b.Name == "D");
+            var button2 = mainWindow.GetVisualDescendants().OfType<Button>().First(b => b.Name == "Sub");
+            var button3 = mainWindow.GetVisualDescendants().OfType<Button>().First(b => b.Name == "M");
+            var button4 = mainWindow.GetVisualDescendants().OfType<Button>().First(b => b.Name == "Result");
+            var button5 = mainWindow.GetVisualDescendants().OfType<Button>().First(b => b.Name == "Reset");
+
+            var box = mainWindow.GetVisualDescendants().OfType<TextBox>().First();
+
+            button.Command.Execute(button.CommandParameter);
+            button1.Command.Execute(button1.CommandParameter);
+            button2.Command.Execute(button2.CommandParameter);
+            button3.Command.Execute(button3.CommandParameter);
+            button5.Command.Execute(button5.CommandParameter);
+
+            await Task.Delay(50);
+
+            string boxtext = box.Text;
+
+            Assert.Equal(ct, boxtext);
+        }
     }
 }

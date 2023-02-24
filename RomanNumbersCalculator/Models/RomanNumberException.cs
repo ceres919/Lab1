@@ -8,7 +8,7 @@ namespace RomanNumbersCalculator.Models
 {
     public class RomanNumberException : Exception
     {
-        public RomanNumberException() : base("#ERROR") { }
-        public RomanNumberException(string message) : base(message) { }
+        private const string ErrorMessage = "#ERROR";
+        public RomanNumberException(string message = ErrorMessage) : base(message) { }
     }
 }

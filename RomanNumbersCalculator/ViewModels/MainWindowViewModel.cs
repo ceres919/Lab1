@@ -9,96 +9,118 @@ namespace RomanNumbersCalculator.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private string currentNumberStringRepresentation = "";
+        private string currentOperationStringRepresentation = "";
+        private Stack<RomanNumberExtend> stackRomanNumbers = new Stack<RomanNumberExtend>();
 
-        string _secondNum;
-        string _operation = " ";
-        private RomanNumberExtend _result;
-        private RomanNumberExtend _secondValue;
+        public ReactiveCommand<string, Unit> AddNumber { get; }
+        public ReactiveCommand<Unit, Unit> ResetCommand { get; }
+        public ReactiveCommand<string, Unit> PlusCommand { get; }
+        public ReactiveCommand<string, Unit> SubCommand { get; }
+        public ReactiveCommand<string, Unit> MulCommand { get; }
+        public ReactiveCommand<string, Unit> DivCommand { get; }
+        public ReactiveCommand<string, Unit> CalculateCommand { get; }
+
+        public string CurrentNumberStringRepresentation
+        {
+            set { this.RaiseAndSetIfChanged(ref currentNumberStringRepresentation, value); }
+            get { return currentNumberStringRepresentation; }
+        }
 
         public MainWindowViewModel()
         {
-            AddNum = ReactiveCommand.Create<string, string>(AddNumTo);
-            ExecuteOperationCommand = ReactiveCommand.Create<string>(ExecuteOperation);
-        }
-
-        public string ShowValue
-        {
-            set { this.RaiseAndSetIfChanged(ref _secondNum, value); }
-            get { return _secondNum; }
-        }
-
-        public ReactiveCommand<string, string> AddNum { get; }
-        public ReactiveCommand<string, Unit> ExecuteOperationCommand { get; }
-
-        private string AddNumTo(string str)
-        {
-            if (_operation == "n")
+            AddNumber = ReactiveCommand.Create<string>(str =>
             {
-                ShowValue = str;
-                _operation = " ";
-            }
-            else
-                ShowValue += str;
-            return ShowValue;
-        }
+                if (currentNumberStringRepresentation == "#ERROR") return;
+                if (currentOperationStringRepresentation == "=") Reset();
+                CurrentNumberStringRepresentation += str;
+            });
+            ResetCommand = ReactiveCommand.Create(() => Reset());
+            PlusCommand = ReactiveCommand.Create<string>(executeOperation);
+            SubCommand = ReactiveCommand.Create<string>(executeOperation);
+            MulCommand = ReactiveCommand.Create<string>(executeOperation);
+            DivCommand = ReactiveCommand.Create<string>(executeOperation);
+            CalculateCommand = ReactiveCommand.Create<string>( operation =>
+            {
+                if (stackRomanNumbers.Count != 1 || currentNumberStringRepresentation == "" || currentNumberStringRepresentation == "#ERROR") return;
+                try
+                {
+                    RomanNumberExtend newNumber = new RomanNumberExtend(currentNumberStringRepresentation);
 
-        private void ExecuteOperation(string operation)
+                    calculateExecuteOperation(newNumber);
+                    currentOperationStringRepresentation = "=";
+                    CurrentNumberStringRepresentation = stackRomanNumbers.Peek().ToString();
+                }
+                catch (RomanNumberException exception)
+                {
+                    CurrentNumberStringRepresentation = $"{exception.Message}";
+                }
+            });
+
+        }
+        private void Reset()
         {
-            if (RomanNumberExtend.ToInt(_secondNum) > 0)
-                _secondValue = new RomanNumberExtend(_secondNum);
-            RomanNumber temp;
+            CurrentNumberStringRepresentation = "";
+            currentOperationStringRepresentation = "";
+            stackRomanNumbers.Clear();
+        }
+        private void calculateExecuteOperation(RomanNumberExtend number)
+        {
+            switch (currentOperationStringRepresentation)
+            {
+                case "+":
+                    stackRomanNumbers.Push(stackRomanNumbers.Pop() + number);
+                    break;
+                case "-":
+                    stackRomanNumbers.Push(stackRomanNumbers.Pop() - number);
+                    break;
+                case "*":
+                    stackRomanNumbers.Push(stackRomanNumbers.Pop() * number);
+                    break;
+                case "/":
+                    stackRomanNumbers.Push(stackRomanNumbers.Pop() / number);
+                    break;
+            }
+        }
+        private void executeOperation(string operation)
+        {
+            if (currentNumberStringRepresentation == "#ERROR") return;
+            if (currentNumberStringRepresentation == "" && currentOperationStringRepresentation != "")
+            {
+                currentOperationStringRepresentation = operation;
+                return;
+            }
+            if (currentNumberStringRepresentation == "") return;
+            if (currentOperationStringRepresentation == "=")
+            {
+                currentOperationStringRepresentation = operation;
+                CurrentNumberStringRepresentation = "";
+                return;
+            }
+            
             try
             {
-                switch (_operation[0])
+                
+                if (currentOperationStringRepresentation == "")
                 {
-                    case '+':
-                        temp = _result + _secondValue;
-                        _result = new RomanNumberExtend(temp.ToString());
-                        break;
-
-                    case '*':
-                        temp = _result * _secondValue;
-                        _result = new RomanNumberExtend(temp.ToString());
-                        break;
-
-                    case '/':
-                        temp = _result / _secondValue;
-                        _result = new RomanNumberExtend(temp.ToString());
-                        break;
-
-                    case '-':
-                        temp = _result - _secondValue;
-                        _result = new RomanNumberExtend(temp.ToString());
-                        break;
-
-                    case ' ':
-                        if (RomanNumberExtend.ToInt(_secondNum) > 0)
-                            _result = new RomanNumberExtend(_secondNum);
-                        break;
-
-                    case 'R':
-                        if (RomanNumberExtend.ToInt(_secondNum) > 0)
-                            _result = new RomanNumberExtend(_secondNum);
-                        break;
-
-                    default:
-                        break;
-                }
-
-                if (operation == "=")
-                {
-                    if (_result != null)
-                        ShowValue = _result.ToString();
-                    _operation = "R";
-                    _result = null;
+                    currentOperationStringRepresentation = operation;
+                    RomanNumberExtend newNumber = new RomanNumberExtend(currentNumberStringRepresentation);
+                    stackRomanNumbers.Push(newNumber);
+                    CurrentNumberStringRepresentation = "";
                 }
                 else
                 {
-                    _operation = operation;
-                    ShowValue = "";
+                    RomanNumberExtend newNumber = new RomanNumberExtend(currentNumberStringRepresentation);
+                    calculateExecuteOperation(newNumber);
+                    currentOperationStringRepresentation = operation;
+                    CurrentNumberStringRepresentation = "";
+
                 }
             }
-            catch (RomanNumberException ex) { ShowValue = $"{ex.Message}"; }
+            catch (RomanNumberException exception) 
+            { 
+                CurrentNumberStringRepresentation = $"{exception.Message}"; 
+            }
         }
     }
 }
